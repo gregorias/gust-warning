@@ -229,8 +229,7 @@ configFilePathP =
 -- 3. Sends an e-mail if yes.
 main :: IO ()
 main = do
-  (ConfigFilePath configFilePath) <- execParser opts
-  config <- readFileText configFilePath
+  config <- readConfig
   now <- getCurrentTime
   currentTimeZone <- getCurrentTimeZone
   maybeError <- runExceptT $ do
@@ -253,3 +252,6 @@ main = do
           <> progDesc "Fetch weather forecast and send a warning if a windy day is coming."
           <> header "gust-warning"
       )
+  readConfig = do
+    (ConfigFilePath configFilePath) <- execParser opts
+    readFileText configFilePath
