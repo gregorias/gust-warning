@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Config (WindSpeed (..))
 import Data.Aeson (eitherDecode)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Lib (
@@ -34,11 +35,11 @@ tests = do
               ]
           )
   describe "Wind" $ do
-    it "isWindy returns not windy if everything is slower than 8m/s" $ do
-      isWindy (Wind 7 7) `shouldBe` False
-    it "isWindy returns windy if anything is faster than 8m/s" $ do
-      isWindy (Wind 9 7) `shouldBe` True
-      isWindy (Wind 7 9) `shouldBe` True
+    it "isWindy returns not windy if everything is slower than the threshold" $ do
+      isWindy (WindSpeed 8) (Wind 7 7) `shouldBe` False
+    it "isWindy returns windy if anything is faster than the threshold" $ do
+      isWindy (WindSpeed 8) (Wind 9 7) `shouldBe` True
+      isWindy (WindSpeed 8) (Wind 7 9) `shouldBe` True
 
 twoAndAHalfResponse :: LByteString
 twoAndAHalfResponse =

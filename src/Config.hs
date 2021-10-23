@@ -5,6 +5,7 @@ module Config (
   EmailAddress (..),
   AppId (..),
   CityId (..),
+  WindSpeed (..),
   Config (..),
   parseConfig,
 ) where
@@ -12,6 +13,7 @@ module Config (
 import Relude (
   Either,
   Eq,
+  Float,
   Generic,
   Show,
   Text,
@@ -35,10 +37,16 @@ newtype EmailAddress = EmailAddress Text
   deriving stock (Generic)
   deriving newtype (HasCodec)
 
+newtype WindSpeed = WindSpeed Float
+  deriving newtype (Eq, Show)
+  deriving stock (Generic)
+  deriving newtype (HasCodec)
+
 data Config = Config
   { appId :: !AppId
   , cityId :: !CityId
   , emailAddress :: !EmailAddress
+  , windThreshold :: !WindSpeed
   }
   deriving stock (Eq, Show, Generic)
 

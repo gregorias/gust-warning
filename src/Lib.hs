@@ -11,7 +11,14 @@ module Lib (
   main,
 ) where
 
-import Config (AppId (AppId), CityId (CityId), Config (Config), EmailAddress (..), parseConfig)
+import Config (
+  AppId (AppId),
+  CityId (CityId),
+  Config (Config),
+  EmailAddress (..),
+  WindSpeed (..),
+  parseConfig,
+ )
 import Control.Exception (try)
 import Data.Aeson (
   FromJSON (parseJSON),
@@ -162,17 +169,14 @@ fetchForecast appId cityId = do
           <> show (responseBody httpResponse)
 
 -- | Returns whether the wind is considered "windy."
---
--- I chose the 5 Beaufort number. 6 was too much: a strong enough wind happened
--- that made my picture fall.
-isWindy :: Wind -> Bool
-isWindy (Wind speed gust) = speed >= 8 || gust >= 8
+isWindy :: WindSpeed -> Wind -> Bool
+isWindy (WindSpeed threshold) (Wind speed gust) = speed >= threshold || gust >= threshold
 
 -- | Checks whether the next day is expected to be windy.
 --
 -- Returns expected windy periods if any.
-isNextDayWindy :: UTCTime -> TwoAndAHalfResponse -> [UTCTime]
-isNextDayWindy now (TwoAndAHalfResponse _ forecasts) = dt <$> filter (isWindy . wind) nextDayForecasts
+isNextDayWindy :: WindSpeed -> UTCTime -> TwoAndAHalfResponse -> [UTCTime]
+isNextDayWindy threshold now (TwoAndAHalfResponse _ forecasts) = dt <$> filter (isWindy threshold . wind) nextDayForecasts
  where
   isWithinNextDay forecast = timeDiff >= secondsToNominalDiffTime 0 && timeDiff <= nominalDay
    where
@@ -233,9 +237,9 @@ main = do
   now <- getCurrentTime
   currentTimeZone <- getCurrentTimeZone
   maybeError <- runExceptT $ do
-    (Config appId cityId emailAddress) <- hoistEither $ parseConfig config
+    (Config appId cityId emailAddress windThreshold) <- hoistEither $ parseConfig config
     forecast <- fetchForecast appId cityId
-    let windyPeriods = isNextDayWindy now forecast
+    let windyPeriods = isNextDayWindy windThreshold now forecast
     let utcToLocalTime' = utcToLocalTime currentTimeZone
     case nonEmpty windyPeriods of
       Just someWindyPeriods -> lift $ sendWarning emailAddress (utcToLocalTime' <$> someWindyPeriods)

@@ -1,3 +1,4 @@
 appId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 cityId = "1111111"
 emailAddress = "johndoe@gmail.com"
+windThreshold = 8.0
