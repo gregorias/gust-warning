@@ -6,6 +6,8 @@ module Lib (
   Wind (..),
   isWindy,
   isNextDayWindy,
+
+  -- * The main function
   main,
 ) where
 
@@ -219,6 +221,13 @@ configFilePathP =
           <> help "The TOML config file."
       )
 
+-- | 'main' runs the main program.
+--
+-- The main program reads provided command-line configuration and does the
+-- following:
+-- 1. Fetches forecast data.
+-- 2. Checks whether the next day will be windy.
+-- 3. Sends an e-mail if yes.
 main :: IO ()
 main = do
   (ConfigFilePath configFilePath) <- execParser opts
