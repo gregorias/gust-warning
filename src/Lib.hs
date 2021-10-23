@@ -163,11 +163,10 @@ fetchForecast appId cityId = do
 
 -- | Returns whether the wind is considered "windy."
 --
--- I chose the 6 Beaufort number, "Large branches in motion; whistling heard in
--- telegraph wires; umbrellas used with difficulty." This sounds like windy
--- enough to move the picture I have.
+-- I chose the 5 Beaufort number. 6 was too much: a strong enough wind happened
+-- that made my picture fall.
 isWindy :: Wind -> Bool
-isWindy (Wind speed gust) = speed >= 10 || gust >= 10
+isWindy (Wind speed gust) = speed >= 8 || gust >= 8
 
 -- | Checks whether the next day is expected to be windy.
 --
