@@ -26,6 +26,7 @@ library
   exposed-modules:
       Config
       Lib
+      Sendmail
   other-modules:
       Paths_gust_warning
   hs-source-dirs:

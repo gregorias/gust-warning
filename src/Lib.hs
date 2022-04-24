@@ -101,10 +101,10 @@ import Relude (
   (||),
  )
 import qualified Relude.List.NonEmpty as NE
-import Turtle (
-  select,
-  shells,
-  textToLines,
+import Sendmail (
+  Mail (..),
+  formatSendmail,
+  sendmail,
  )
 
 data Wind = Wind
@@ -183,13 +183,6 @@ isNextDayWindy threshold now (TwoAndAHalfResponse _ forecasts) = dt <$> filter (
     timeDiff = diffUTCTime (dt forecast) now
   nextDayForecasts = filter isWithinNextDay forecasts
 
--- | A mail message with a title.
-data Mail = Mail
-  { title :: !Text
-  , content :: !Text
-  }
-  deriving stock (Eq, Show)
-
 composeMessage :: NonEmpty LocalTime -> Mail
 composeMessage windyTimes =
   Mail
@@ -199,18 +192,8 @@ composeMessage windyTimes =
  where
   (start, end) = (NE.head &&& NE.last) $ toText . iso8601Show <$> windyTimes
 
--- | A mail message in the format used by Sendmail
-newtype Sendmail = Sendmail Text
-  deriving newtype (Eq, Show)
-
-formatMail :: Mail -> Sendmail
-formatMail Mail{title = title, content = content} = Sendmail $ title <> "\n\n" <> content
-
 sendWarning :: EmailAddress -> NonEmpty LocalTime -> IO ()
-sendWarning target windyPeriods =
-  shells
-    ("sendmail '" <> coerce target <> "'")
-    (select . textToLines . coerce . formatMail . composeMessage $ windyPeriods)
+sendWarning target windyPeriods = sendmail target (formatSendmail . composeMessage $ windyPeriods)
 
 newtype ConfigFilePath = ConfigFilePath FilePath
   deriving newtype (Show, Eq)
