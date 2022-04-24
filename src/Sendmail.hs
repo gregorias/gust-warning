@@ -1,9 +1,10 @@
 -- | This module implements mail sending utilities
 module Sendmail (
   Mail (..),
+  sendmail,
+  mail,
   Sendmail,
   formatSendmail,
-  sendmail,
 ) where
 
 import Config (
@@ -36,3 +37,10 @@ sendmail target msg =
   shells
     ("sendmail '" <> coerce target <> "'")
     (select . textToLines . coerce $ msg)
+
+-- | Sends an email using 'mail'.
+mail :: EmailAddress -> Mail -> IO ()
+mail target Mail{title = title', content = content'} =
+  shells
+    ("mail -s '" <> title' <> "' '" <> coerce target <> "'")
+    (select . textToLines $ content')
