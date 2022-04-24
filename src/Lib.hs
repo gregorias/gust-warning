@@ -103,8 +103,7 @@ import Relude (
 import qualified Relude.List.NonEmpty as NE
 import Sendmail (
   Mail (..),
-  formatSendmail,
-  sendmail,
+  mail,
  )
 
 data Wind = Wind
@@ -193,7 +192,7 @@ composeMessage windyTimes =
   (start, end) = (NE.head &&& NE.last) $ toText . iso8601Show <$> windyTimes
 
 sendWarning :: EmailAddress -> NonEmpty LocalTime -> IO ()
-sendWarning target windyPeriods = sendmail target (formatSendmail . composeMessage $ windyPeriods)
+sendWarning target windyPeriods = mail target (composeMessage windyPeriods)
 
 newtype ConfigFilePath = ConfigFilePath FilePath
   deriving newtype (Show, Eq)
