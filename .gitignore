@@ -2,3 +2,4 @@
 *~
 *.hie
 config.toml
+.DS_Store
