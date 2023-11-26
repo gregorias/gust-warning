@@ -10,16 +10,7 @@ module Config (
   parseConfig,
 ) where
 
-import Relude (
-  Either,
-  Eq,
-  Float,
-  Generic,
-  Show,
-  Text,
-  first,
-  (.),
- )
+import Relude
 import Toml (HasCodec, TomlCodec, decode, genericCodec, prettyTomlDecodeErrors)
 
 newtype AppId = AppId Text

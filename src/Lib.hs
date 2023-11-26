@@ -25,7 +25,7 @@ import Data.Aeson (
   withObject,
   (.:),
  )
-import qualified Data.Text.IO as T
+import Data.Text.IO qualified as T
 import Data.Time (
   LocalTime,
   UTCTime,
@@ -100,7 +100,7 @@ import Relude (
   (>=),
   (||),
  )
-import qualified Relude.List.NonEmpty as NE
+import Relude.List.NonEmpty qualified as NE
 import Sendmail (
   Mail (..),
   mail,
