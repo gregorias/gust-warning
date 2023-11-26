@@ -3,10 +3,24 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: tomland-1.3.3.2@sha256:887dc39a8c9819deb8fcb6fde72e87dad4c94108b1736a5bf7215ccf3117bd0f,9474
+    pantry-tree:
+      sha256: 09b5c00b3b129ff3ead6a57489d1c5af24567ab9d08399ab3bf53f43affcc60b
+      size: 6430
+  original:
+    hackage: tomland-1.3.3.2
+- completed:
+    hackage: validation-selective-0.2.0.0@sha256:e1ab5482dede8bf676d729a09109c7c5f798363b9d458e4197a27afb8b48fdd3,3907
+    pantry-tree:
+      sha256: c5f1ddcb6a721cdb12cdec1e12af3ad7dcc936745e3fd53e5dd09b4a12b83bd5
+      size: 697
+  original:
+    hackage: validation-selective-0.2.0.0
 snapshots:
 - completed:
-    size: 590100
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/28.yaml
-    sha256: 428ec8d5ce932190d3cbe266b9eb3c175cd81e984babf876b64019e2cbe4ea68
-  original: lts-18.28
+    sha256: 7d4b649cf368f9076d8aa049aa44efe58950971d105892734e9957b2a26a2186
+    size: 640060
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/21/21.yaml
+  original: lts-21.21

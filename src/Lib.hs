@@ -25,6 +25,7 @@ import Data.Aeson (
   withObject,
   (.:),
  )
+import qualified Data.Text.IO as T
 import Data.Time (
   LocalTime,
   UTCTime,
@@ -85,7 +86,6 @@ import Relude (
   nonEmpty,
   otherwise,
   putTextLn,
-  readFileText,
   runExceptT,
   show,
   toText,
@@ -124,7 +124,8 @@ instance FromJSON TwoAndAHalfForecast where
   parseJSON = withObject "TwoAndAHalfForecast" $ \v ->
     TwoAndAHalfForecast
       <$> (posixSecondsToUTCTime <$> v .: "dt")
-      <*> v .: "wind"
+      <*> v
+      .: "wind"
 
 data TwoAndAHalfResponse = TwoAndAHalfResponse
   { cod :: String
@@ -148,8 +149,8 @@ fetchForecast appId cityId = do
     queryParam "id" (Just @Text . coerce $ cityId)
       <> queryParam "appid" (Just @Text . coerce $ appId)
   runRequest =
-    runReq @IO defaultHttpConfig $
-      req
+    runReq @IO defaultHttpConfig
+      $ req
         GET
         url
         NoReqBody
@@ -159,8 +160,8 @@ fetchForecast appId cityId = do
   handleOwmError httpResponse
     | responseStatusCode httpResponse == 200 = return $ responseBody httpResponse
     | otherwise =
-      Left $
-        "OWM returned a non-successful status code "
+        Left
+          $ "OWM returned a non-successful status code "
           <> show (responseStatusCode httpResponse)
           <> ".\n"
           <> show (responseStatusMessage httpResponse)
@@ -240,4 +241,4 @@ main = do
       )
   readConfig = do
     (ConfigFilePath configFilePath) <- execParser opts
-    readFileText configFilePath
+    T.readFile configFilePath
