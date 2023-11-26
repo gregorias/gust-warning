@@ -38,6 +38,7 @@ import Data.Time (
 import Data.Time.Clock (secondsToNominalDiffTime)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format.ISO8601 (iso8601Show)
+import Data.Version (showVersion)
 import GHC.Generics ()
 import Network.HTTP.Req (
   GET (GET),
@@ -61,7 +62,8 @@ import Optics (
   over,
   _Left,
  )
-import Options.Applicative (Parser, execParser, fullDesc, header, help, helper, info, long, metavar, progDesc, strOption)
+import Options.Applicative (Parser, execParser, fullDesc, header, help, helper, info, long, metavar, progDesc, simpleVersioner, strOption)
+import Paths_gust_warning (version)
 import Relude (
   Bool,
   Either (Left),
@@ -234,7 +236,7 @@ main = do
  where
   opts =
     info
-      (configFilePathP <**> helper)
+      (configFilePathP <**> helper <**> simpleVersioner (showVersion version))
       ( fullDesc
           <> progDesc "Fetch weather forecast and send a warning if a windy day is coming."
           <> header "gust-warning"
