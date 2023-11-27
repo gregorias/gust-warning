@@ -1,4 +1,8 @@
+# OpenWeatherMap API Key
 appId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+# City ID from OpenWeatherMap
 cityId = "1111111"
+# The email address to send alerts to
 emailAddress = "johndoe@gmail.com"
+# Beaufort scale wind speed threshold
 windThreshold = 8.0
